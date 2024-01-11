@@ -1,0 +1,207 @@
+---
+title: "Final Project"
+author: "Varad Luktuke"
+date: "2023-05-02"
+output: html_document
+---
+
+```{R}
+df <- read.csv("C:/Users/luktu/Desktop/CU Boulder/STATS 5010/Project/carprice_model.csv")
+head(df)
+```
+
+```{r}
+summary(df)
+```
+
+```{r}
+sapply(lapply(df, unique), length)
+```
+
+```{r}
+#Deleting those columns
+df = subset(df, select = -c(X, out))
+```
+
+
+```{r}
+#Absolute full model
+fullmodel <- lm(price ~ ., data = df)
+summary(fullmodel)
+```
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(fullmodel)
+```
+
+
+
+```{r}
+#Log transformation - full model
+logged_fullmodel <- lm(log(price) ~ ., data = df)
+summary(logged_fullmodel)
+```
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(logged_fullmodel)
+```
+
+```{r}
+#Determining by AIC
+library(leaps)
+library(MASS)
+
+n = dim(df)[1]; 
+reg1 = regsubsets(log(price) ~ ., data = df)
+rs = summary(reg1)
+rs$which
+```
+
+```{r}
+AIC = 2*(2:23) + n*log(rs$rss / n)
+plot(AIC ~ I(1:22), xlab = "Number of Predictors", ylab = "AIC")
+```
+
+
+
+
+```{r}
+BIC = log(n)*(2:23) + n*log(rs$rss/n) 
+plot(BIC ~ I(1:22), xlab = "number of predictors", ylab = "BIC")
+```
+
+
+
+```{r}
+#Model from graph
+mfg_wl <- lm(price ~ CompanyName + fueltype + carwidth + curbweight + 
+                 cylindernumber + fuelsystem + horsepower + citympg, data = df)
+summary(mfg_wl)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(mfg_wl)
+```
+
+```{r}
+#Model from graph
+mfg <- lm(log(price) ~ CompanyName + fueltype + carwidth + curbweight + 
+                 cylindernumber + fuelsystem + horsepower + citympg, data = df)
+summary(mfg)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(mfg)
+```
+
+```{r}
+glmod_mfg <- glm(log(price) ~ CompanyName + fueltype + carwidth + curbweight + 
+                 cylindernumber + fuelsystem + horsepower + citympg, data = df)
+summary(glmod_mfg)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(glmod_mfg)
+```
+
+
+
+```{r}
+r = resid(mfg)
+n = dim(df)[1]; 
+x = head(df$r, n-1)
+y = tail(df$r, n-1)
+```
+
+
+```{r}
+x
+```
+
+
+```{r}
+library(ggplot2)
+srp = data.frame(x,y)
+ggplot(srp, aes(x = x, y = y)) + 
+    geom_point() + 
+    geom_vline(xintercept = 0) + 
+    geom_hline(yintercept = 0) + 
+    xlab(expression(hat(epsilon)[i])) +
+    ylab(expression(hat(epsilon)[i+1])) + 
+    ggtitle("Successive Residual Plot") + 
+    theme_bw() + 
+    theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+
+```{R}
+rfe1 <- lm(price ~ CompanyName + fueltype + wheelbase + curbweight + enginetype + 
+                 cylindernumber + stroke + horsepower + citympg + highwaympg, data = df)
+summary(rfe1)
+```
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(rfe1)
+```
+
+```{R}
+logged_rfe1 <- lm(log(price) ~ CompanyName + fueltype + wheelbase + curbweight + enginetype + 
+                 cylindernumber + stroke + horsepower + citympg + highwaympg, data = df)
+summary(logged_rfe1)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(logged_rfe1)
+```
+
+```{R}
+rfe2 <- update(df_model1, .~. -highwaympg)
+summary(rfe2)
+```
+
+```{R}
+rfe3 <- update(df_model2, .~. -citympg)
+summary(rfe3)
+```
+
+```{R}
+rfe4 <- update(df_model3, .~. -wheelbase)
+summary(rfe4)
+```
+
+```{R}
+logged_rfe4 <- lm(log(price) ~ CompanyName + fueltype + curbweight + enginetype + 
+                 cylindernumber + stroke + horsepower, data = df)
+summary(logged_rfe4)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(logged_rfe4)
+```
+
+
+```{R}
+anova(rfe4, rfe1)
+```
+
+The result shows a non-significant result (p = 0.08309). Thus, we should reject df_model1 and stick with df_model4.
+```{R}
+anova(logged_rfe4, logged_rfe1)
+```
+As the p-value is less than 0.05, we can say that logged_df_1 is enough and we don't need reduced model i.e. logged_df_4.
+
+```{r}
+anova(mfg, logged_rfe1)
+```
