@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{R}
-df <- read.csv("C:/Users/luktu/Desktop/CU Boulder/STATS 5010/Project/carprice_model.csv")
+df <- read.csv("path/carprice_model.csv")
 head(df)
 ```
 
