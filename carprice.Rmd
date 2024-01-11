@@ -1,12 +1,12 @@
 ---
 title: "Final Project"
-author: "Napathsawan Poopaiboon"
+author: "Varad Luktuke"
 date: "2023-05-02"
 output: html_document
 ---
 
 ```{R}
-df <- read.csv("C:/Users/luktu/Desktop/CU Boulder/Spring'23/STATS 5010/Project/carprice_model.csv")
+df <- read.csv("path/carprice_model.csv")
 head(df)
 ```
 
