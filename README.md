@@ -10,21 +10,21 @@ In this project, we will be using a publicly available dataset containing inform
 ##### Prior Research
 There have been numerous studies on car price prediction using machine learning and statistical techniques. These studies have shown that features such as mileage, age, make, model, and engine size are essential determinants of car prices. Several machine learning algorithms, such as linear regression, decision trees, and random forests, have been used to develop predictive models. Additionally, statistical tests such as regression analysis, ANOVA, t-tests, and correlation analysis have been used to evaluate the quality of the data and the validity of the models.
 
+
 ##### Data Collection
 We will be using a publicly available dataset containing information on various car features. The dataset was collected from various sources and contains data on thousands of cars from different manufacturers and models.
+
 
 ##### Data Preprocessing
 To prepare the data for analysis, We will preprocess the data by removing missing values, outliers, and irrelevant features. We will also scale the data to ensure that the features are on the same scale and are comparable.
 
+
 ##### Feature Selection
 We will select the most relevant features for our model using techniques such as correlation analysis, feature importance, and dimensionality reduction. We will identify the features that have the most significant impact on car prices excluding irrelevant features.
 
-##### Machine Learning
-We will train and evaluate multiple machine learning models such as linear regression, decision trees, and random forests. We will use cross-validation and hyperparameter tuning techniques to optimize the models' performance and ensure that they are not overfitting the data.
 
 ##### Statistical Tests
 We will use statistical tests such as regression analysis, ANOVA, t-tests, and correlation analysis to evaluate the quality of the data and the validity of our models. These tests will help us identify any issues with the data and ensure that our models are accurate and reliable.
-
 
 
 
